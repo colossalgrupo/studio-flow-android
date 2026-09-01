@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val StudioFlowLightColorScheme = lightColorScheme(
+private val StudioScheduleLightColorScheme = lightColorScheme(
     primary = EmeraldLight,
     onPrimary = Color.White,
     primaryContainer = Color(0xFFB7E4D9),
@@ -33,7 +33,7 @@ private val StudioFlowLightColorScheme = lightColorScheme(
     onSurfaceVariant = Color(0xFF44483F)
 )
 
-private val StudioFlowDarkColorScheme = darkColorScheme(
+private val StudioScheduleDarkColorScheme = darkColorScheme(
     primary = EmeraldDark,
     onPrimary = Color(0xFF00382E),
     primaryContainer = Color(0xFF005042),
@@ -55,11 +55,11 @@ private val StudioFlowDarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun StudioFlowTheme(
+fun StudioScheduleTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) StudioFlowDarkColorScheme else StudioFlowLightColorScheme
+    val colorScheme = if (darkTheme) StudioScheduleDarkColorScheme else StudioScheduleLightColorScheme
 
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -72,7 +72,7 @@ fun StudioFlowTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = StudioFlowTypography,
+        typography = StudioScheduleTypography,
         content = content
     )
 }

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Studio Flow"
+rootProject.name = "Studio Schedule"
 include(":app")

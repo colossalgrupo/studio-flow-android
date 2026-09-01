@@ -14,7 +14,7 @@ import com.colossalgrupo.studioflow.ui.profileselect.ProfileSelectionScreen
 import com.colossalgrupo.studioflow.ui.splash.SplashScreen
 
 @Composable
-fun StudioFlowNavHost(
+fun StudioScheduleNavHost(
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(navController = navController, startDestination = Screen.Splash.route) {

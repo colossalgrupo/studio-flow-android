@@ -33,7 +33,7 @@ fun ProfileSelectionScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Como você quer usar o Studio Flow?",
+                text = "Como você quer usar o Studio Schedule?",
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(

@@ -1,6 +1,6 @@
-# Studio Flow — App Android
+# Studio Schedule — App Android
 
-Studio Flow é um marketplace de agendamento com pagamento integrado para
+Studio Schedule é um marketplace de agendamento com pagamento integrado para
 profissionais de beleza e bem-estar: barbearias, personal trainers, estúdios
 de pilates, manicures, podólogas, massagistas, trancistas e autônomos do
 setor. Este repositório contém o **app Android nativo**, com dois perfis sob
@@ -48,7 +48,7 @@ API quando o backend existir.
 
 ## Tema visual
 
-Paleta baseada no plano de produto do Studio Flow (Material 3 `ColorScheme`,
+Paleta baseada no plano de produto do Studio Schedule (Material 3 `ColorScheme`,
 com suporte a light e dark):
 
 | Papel                        | Light     | Dark      |

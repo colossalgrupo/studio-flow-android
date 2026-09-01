@@ -37,7 +37,7 @@ fun LoginScreen(
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = "Entre com sua conta Studio Flow",
+                text = "Entre com sua conta Studio Schedule",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
             )

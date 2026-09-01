@@ -47,7 +47,7 @@ fun SplashScreen(onFinished: () -> Unit) {
                 modifier = Modifier.size(64.dp)
             )
             Text(
-                text = "Studio Flow",
+                text = "Studio Schedule",
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
