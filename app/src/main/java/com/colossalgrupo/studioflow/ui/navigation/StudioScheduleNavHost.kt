@@ -31,8 +31,15 @@ fun StudioScheduleNavHost(
 
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Screen.ProfileSelection.route) {
+                onLoginSuccess = { session ->
+                    // O perfil (Empreendedor/Cliente) é fixado na conta pelo backend no
+                    // cadastro — não é uma escolha livre pós-login, então vamos direto
+                    // para a home correspondente e pulamos a ProfileSelectionScreen.
+                    val destination = when (session.role) {
+                        UserRole.ENTREPRENEUR -> Screen.EntrepreneurHome.route
+                        UserRole.CLIENT -> Screen.ClientHome.route
+                    }
+                    navController.navigate(destination) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
