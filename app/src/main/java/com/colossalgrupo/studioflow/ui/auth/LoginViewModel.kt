@@ -54,6 +54,7 @@ class LoginViewModel(
                 is LoginResult.InvalidCredentials -> errorMessage = result.message
                 is LoginResult.EmailNotVerified -> errorMessage = result.message
                 is LoginResult.ValidationError -> errorMessage = result.message
+                is LoginResult.WrongProfile -> errorMessage = result.message
                 is LoginResult.NetworkError ->
                     errorMessage = "Não foi possível conectar. Verifique sua internet e tente novamente."
                 is LoginResult.UnknownError -> errorMessage = result.message

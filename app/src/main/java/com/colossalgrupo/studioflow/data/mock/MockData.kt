@@ -1,8 +1,6 @@
 package com.colossalgrupo.studioflow.data.mock
 
 import com.colossalgrupo.studioflow.domain.model.Establishment
-import com.colossalgrupo.studioflow.domain.model.PayoutPeriodicity
-import com.colossalgrupo.studioflow.domain.model.Professional
 import com.colossalgrupo.studioflow.domain.model.ServiceCategory
 import com.colossalgrupo.studioflow.domain.model.ServiceOffering
 
@@ -77,36 +75,6 @@ object MockData {
             services = listOf(
                 ServiceOffering("srv-9", "Podologia clínica", 50, 90.0)
             )
-        )
-    )
-
-    val professionals: List<Professional> = listOf(
-        Professional(
-            id = "prof-1",
-            name = "Rafael Souza",
-            cpf = "123.456.789-00",
-            specialties = listOf("Corte masculino", "Barba"),
-            payoutKey = "rafael.souza@pix.com",
-            payoutPeriodicity = PayoutPeriodicity.WEEKLY,
-            commissionPercent = 60.0
-        ),
-        Professional(
-            id = "prof-2",
-            name = "Beatriz Andrade",
-            cpf = "987.654.321-00",
-            specialties = listOf("Manicure", "Esmaltação em gel"),
-            payoutKey = "beatriz.andrade@pix.com",
-            payoutPeriodicity = PayoutPeriodicity.MONTHLY,
-            commissionPercent = 55.0
-        ),
-        Professional(
-            id = "prof-3",
-            name = "Marina Ferreira",
-            cpf = "456.789.123-00",
-            specialties = listOf("Podologia clínica"),
-            payoutKey = "marina.ferreira@pix.com",
-            payoutPeriodicity = PayoutPeriodicity.WEEKLY,
-            commissionPercent = 65.0
         )
     )
 

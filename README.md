@@ -3,13 +3,14 @@
 Studio Schedule é um marketplace de agendamento com pagamento integrado para
 profissionais de beleza e bem-estar: barbearias, personal trainers, estúdios
 de pilates, manicures, podólogas, massagistas, trancistas e autônomos do
-setor. Este repositório contém o **app Android nativo**, com dois perfis sob
-um único login: **Empreendedor** (dono do estabelecimento) e **Cliente**
-(consumidor final).
+setor. Este repositório contém o **app Android nativo do cliente final** —
+quem busca um estabelecimento, agenda um horário e paga. O dono do
+estabelecimento (perfil Empreendedor) usa o painel web, em outro repositório
+(`studio-flow-web`), não este app.
 
-> Esta etapa entrega apenas o **scaffold** do app: navegação, telas e dados
-> mockados. Não há backend, autenticação real, banco de dados ou pagamento
-> integrado ainda — isso será um projeto separado.
+> Login e autenticação já conversam com o backend real (`studio-flow-backend`).
+> O restante do fluxo (busca de estabelecimento, agendamento e pagamento) ainda
+> usa dados mockados — ver o roadmap abaixo.
 
 ## Stack
 
@@ -25,26 +26,29 @@ um único login: **Empreendedor** (dono do estabelecimento) e **Cliente**
 ```
 app/src/main/java/com/colossalgrupo/studioflow/
 ├── domain/
-│   ├── model/        # Professional, Establishment, SubscriptionPlan, etc.
-│   └── repository/   # Interfaces de repositório (contrato para o futuro backend)
+│   ├── model/        # Establishment, AuthSession, etc.
+│   └── repository/   # Interfaces de repositório
 ├── data/
-│   ├── mock/         # Dados mock (estabelecimentos, profissionais, horários)
-│   └── repository/   # Implementações em memória dos repositórios
+│   ├── remote/        # Retrofit/OkHttp, DTOs, interceptor de autenticação
+│   ├── local/          # Sessão autenticada (token) cifrada no device
+│   ├── mock/           # Dados mock (estabelecimentos, horários) — só o que
+│   │                    ainda não tem endpoint real
+│   └── repository/     # Implementações (RemoteAuthRepository já é real;
+│                          o resto ainda é em memória)
 └── ui/
     ├── theme/         # Cores, tipografia e ColorScheme (light/dark)
     ├── navigation/    # Grafo de navegação (NavHost) e rotas
     ├── splash/        # Splash screen
-    ├── auth/          # Login (estado local, sem autenticação real)
-    ├── profileselect/ # Seleção de perfil: Empreendedor ou Cliente
+    ├── auth/          # Login (autenticação real via backend)
     ├── client/         # Home do cliente (lista de estabelecimentos + agendar)
-    ├── entrepreneur/   # Home do empreendedor + cadastro de profissional
     └── components/     # Composables reutilizáveis
 ```
 
 Cada tela segue o padrão `Screen` (Composable) + `ViewModel` (estado e
-regras), com os repositórios em memória injetados por parâmetro padrão —
-prontos para serem trocados por implementações reais que conversem com uma
-API quando o backend existir.
+regras). `LoginViewModel` já recebe suas dependências via `AppContainer`
+(`StudioScheduleApplication`); as telas que ainda usam dados mockados seguem
+recebendo o repositório em memória por parâmetro padrão, até ganharem um
+endpoint real.
 
 ## Tema visual
 
@@ -65,14 +69,11 @@ Tipografia usa a escala padrão do Material 3 com a fonte do sistema
 ## Telas iniciais
 
 1. **Splash** — logo/nome do app.
-2. **Login** — e-mail/senha em estado local (sem autenticação real ainda).
-3. **Seleção de perfil** — Empreendedor ou Cliente, no mesmo login.
-4. **Home do Cliente** — lista mock de estabelecimentos/profissionais, com
-   botão "Agendar".
-5. **Home do Empreendedor** — lista mock de profissionais cadastrados, plano
-   de assinatura atual e botão "novo profissional".
-6. **Novo profissional** — formulário (nome, CPF, especialidades, conta
-   bancária/Pix, percentual de repasse, periodicidade), salvo em memória.
+2. **Login** — e-mail/senha, autentica contra `POST /api/auth/login` do
+   backend. Uma conta de Empreendedor autentica normalmente mas é rejeitada
+   aqui (esse perfil não tem o que fazer neste app).
+3. **Home do Cliente** — lista mock de estabelecimentos/profissionais, com
+   botão "Agendar" (fluxo de agendamento e pagamento ainda por vir).
 
 ## Como rodar
 
@@ -90,14 +91,13 @@ Ou via linha de comando, com o Android SDK configurado:
 
 ## Roadmap (fora do escopo desta etapa)
 
-- Backend próprio (outro repositório) com API para autenticação, agenda,
-  catálogo de serviços e pagamentos.
-- Pagamento integrado via Pix e cartão, com **split de pagamento** automático
-  entre plataforma e profissional, conforme o plano de assinatura:
-  - **Standard** — R$ 49,90/mês, 5% por transação, até 3 profissionais.
-  - **Black** — R$ 89,90/mês, 2,5% por transação, até 10 profissionais.
-  - **Diamond** — R$ 189,90/mês, 1,5% por transação, profissionais ilimitados.
-- Repasse automático ao profissional (semanal ou mensal, conforme regra
-  cadastrada) e painel financeiro com extrato real.
-- Autenticação real e persistência de dados (banco de dados/API).
+- Repositório de estabelecimentos via API real (`GET /api/estabelecimentos`),
+  no lugar do mock.
+- Fluxo de agendamento: seleção de serviço/horário e criação do agendamento
+  via API.
+- Checkout: tela de pagamento (Pix/cartão), campo de CPF (exigido pelo
+  gateway Asaas) e exibição do QR code Pix quando o pagamento ficar pendente.
 - Busca por localização e avaliações reais de clientes.
+- Split de pagamento entre plataforma/estabelecimento/profissional e planos
+  de assinatura (Standard/Black/Diamond) são regras do backend e do painel
+  web do Empreendedor — não deste app.

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.colossalgrupo.studioflow.domain.model.AuthSession
-import com.colossalgrupo.studioflow.domain.model.UserRole
 
 /**
  * Persiste a sessão autenticada (token JWT + dados do usuário) em SharedPreferences
@@ -27,7 +26,6 @@ class SecureSessionStorage(context: Context) {
     fun save(session: AuthSession) {
         preferences.edit()
             .putString(KEY_TOKEN, session.token)
-            .putString(KEY_ROLE, session.role.name)
             .putString(KEY_NOME, session.nome)
             .putString(KEY_EMAIL, session.email)
             .apply()
@@ -35,11 +33,9 @@ class SecureSessionStorage(context: Context) {
 
     fun get(): AuthSession? {
         val token = preferences.getString(KEY_TOKEN, null) ?: return null
-        val role = preferences.getString(KEY_ROLE, null)?.let { runCatching { UserRole.valueOf(it) }.getOrNull() }
-            ?: return null
         val nome = preferences.getString(KEY_NOME, null) ?: return null
         val email = preferences.getString(KEY_EMAIL, null) ?: return null
-        return AuthSession(token = token, role = role, nome = nome, email = email)
+        return AuthSession(token = token, nome = nome, email = email)
     }
 
     fun clear() {
@@ -49,7 +45,6 @@ class SecureSessionStorage(context: Context) {
     private companion object {
         const val PREFERENCES_NAME = "studio_schedule_secure_session"
         const val KEY_TOKEN = "token"
-        const val KEY_ROLE = "role"
         const val KEY_NOME = "nome"
         const val KEY_EMAIL = "email"
     }

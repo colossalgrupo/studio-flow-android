@@ -6,7 +6,6 @@ import com.colossalgrupo.studioflow.data.remote.dto.ErrorResponseDto
 import com.colossalgrupo.studioflow.data.remote.dto.LoginRequestDto
 import com.colossalgrupo.studioflow.data.remote.dto.TipoPerfilDto
 import com.colossalgrupo.studioflow.domain.model.AuthSession
-import com.colossalgrupo.studioflow.domain.model.UserRole
 import com.colossalgrupo.studioflow.domain.repository.AuthRepository
 import com.colossalgrupo.studioflow.domain.repository.LoginResult
 import kotlinx.serialization.json.Json
@@ -24,9 +23,13 @@ class RemoteAuthRepository(
     override suspend fun login(email: String, senha: String): LoginResult {
         return try {
             val response = authApi.login(LoginRequestDto(email = email, senha = senha))
+            if (response.tipoPerfil != TipoPerfilDto.CLIENTE) {
+                return LoginResult.WrongProfile(
+                    "Esta conta é de Empreendedor. Use o painel web do Studio Schedule para gerenciar seu estabelecimento."
+                )
+            }
             val session = AuthSession(
                 token = response.token,
-                role = response.tipoPerfil.toDomain(),
                 nome = response.nome,
                 email = response.email
             )
@@ -57,10 +60,5 @@ class RemoteAuthRepository(
     private fun parseErrorBody(errorBody: ResponseBody?): ErrorResponseDto? {
         val raw = errorBody?.string() ?: return null
         return runCatching { errorJson.decodeFromString<ErrorResponseDto>(raw) }.getOrNull()
-    }
-
-    private fun TipoPerfilDto.toDomain(): UserRole = when (this) {
-        TipoPerfilDto.EMPREENDEDOR -> UserRole.ENTREPRENEUR
-        TipoPerfilDto.CLIENTE -> UserRole.CLIENT
     }
 }

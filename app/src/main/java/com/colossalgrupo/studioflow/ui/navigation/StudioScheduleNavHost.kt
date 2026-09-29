@@ -5,12 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.colossalgrupo.studioflow.domain.model.UserRole
 import com.colossalgrupo.studioflow.ui.auth.LoginScreen
 import com.colossalgrupo.studioflow.ui.client.ClientHomeScreen
-import com.colossalgrupo.studioflow.ui.entrepreneur.EntrepreneurHomeScreen
-import com.colossalgrupo.studioflow.ui.entrepreneur.NewProfessionalScreen
-import com.colossalgrupo.studioflow.ui.profileselect.ProfileSelectionScreen
 import com.colossalgrupo.studioflow.ui.splash.SplashScreen
 
 @Composable
@@ -31,30 +27,11 @@ fun StudioScheduleNavHost(
 
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginSuccess = { session ->
-                    // O perfil (Empreendedor/Cliente) é fixado na conta pelo backend no
-                    // cadastro — não é uma escolha livre pós-login, então vamos direto
-                    // para a home correspondente e pulamos a ProfileSelectionScreen.
-                    val destination = when (session.role) {
-                        UserRole.ENTREPRENEUR -> Screen.EntrepreneurHome.route
-                        UserRole.CLIENT -> Screen.ClientHome.route
-                    }
-                    navController.navigate(destination) {
+                onLoginSuccess = {
+                    // Este app é só para o cliente final; o login já rejeita contas de
+                    // Empreendedor antes de chegar aqui (ver RemoteAuthRepository).
+                    navController.navigate(Screen.ClientHome.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
-                    }
-                }
-            )
-        }
-
-        composable(Screen.ProfileSelection.route) {
-            ProfileSelectionScreen(
-                onProfileSelected = { role ->
-                    val destination = when (role) {
-                        UserRole.ENTREPRENEUR -> Screen.EntrepreneurHome.route
-                        UserRole.CLIENT -> Screen.ClientHome.route
-                    }
-                    navController.navigate(destination) {
-                        popUpTo(Screen.ProfileSelection.route) { inclusive = true }
                     }
                 }
             )
@@ -62,19 +39,6 @@ fun StudioScheduleNavHost(
 
         composable(Screen.ClientHome.route) {
             ClientHomeScreen()
-        }
-
-        composable(Screen.EntrepreneurHome.route) {
-            EntrepreneurHomeScreen(
-                onAddProfessional = { navController.navigate(Screen.NewProfessional.route) }
-            )
-        }
-
-        composable(Screen.NewProfessional.route) {
-            NewProfessionalScreen(
-                onSaved = { navController.popBackStack() },
-                onBack = { navController.popBackStack() }
-            )
         }
     }
 }
